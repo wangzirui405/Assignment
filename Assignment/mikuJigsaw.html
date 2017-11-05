@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>初音拼图</title>
+
+	<style type="text/css">
+  table,tr,td,th 
+  {
+    border:none;
+    color: white;
+    background:white;
+    left: 50%;
+    top: 50%;
+    margin-left:470px;
+    margin-top: 100px;
+    border-collapse: collapse;
+  }
+	td 
+  {
+    line-height: 0px;
+
+  }
+
+  .changeCss:hover {
+    box-shadow: 0 20px 20px 0 rgba(0,0,0,0.24), 0 50px 50px 0 rgba(0,0,0,0.19);
+  }
+  .changeCss:hover .backgroundStyle{
+    background: #000;
+    transform:rotate(180deg);
+    opacity:0.8;
+    filter:alpha(opacity=80);
+  }
+  .changeCss:hover .textStyle{
+    color: #fff;
+    transform:rotate(315deg);
+  }
+  .backgroundStyle{
+    left: 50%;
+    height: 50%;
+    margin-left: -50px;
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: #fff;
+    transition: background 1s;
+    transition:  transform 0.5s;
+    opacity:0.6;
+    filter:alpha(opacity=60);
+    transition: filter 1s;
+
+  }
+  .clickStyle{
+    left: 50%;
+    height: 50%;
+    margin-left: -50px;
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border:none;
+
+  }
+  .div-rotate{
+    transition: box-shadow 1s;
+    height: 100px;
+    width: 100px;
+    transform:rotate(45deg);
+    float: right;
+    margin-left: 50px;
+
+
+
+  }
+  .textStyle{
+    position: absolute;
+    transform:rotate(-45deg);
+    top: 50%;left: 50%;
+    margin-top:-30px;
+    margin-left:-50px;
+    font-size: 20px;
+    height: 60px;
+    width: 100px;
+    line-height:60px;
+    text-align: center;
+    transition: color 1s;
+    transition: transform 0.5s;
+    font-family: "微软雅黑";
+    font-weight:bold;
+
+  }
+
+  @keyframes allEnter
+  {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+
+  }
+
+
+	</style>
+
+</head>
+<body background="mainBackground.jpeg">
+
+
+<script type="text/javascript" src="jquery-1.11.3.min.js"></script>
+
+
+
+<script type="text/javascript">
+	var nowId;
+  var exchanged=0;
+	var nowLocation;
+	var lastId="#img9";
+	var nowIdForDOM;
+  var judgeForExchangeOrNot;
+  var nowNumber;
+  var lastNumber=15;
+
+
+
+
+  function allFadeIn()
+  {
+    for (var i = 1; i <= 9; i++) 
+    {
+      $("#img"+i).fadeIn();
+    }
+
+  }
+
+  function allFadeOut()
+  {
+    clickFrequency();
+    if (judgeForClick2==true) 
+    {
+        for (var i = 1; i <= 9; i++) 
+        {
+            $("#img"+i).fadeOut();
+        }
+
+    }
+  }//自定义动画
+
+
+
+    function restore()
+    {
+    	allFadeOut();
+      exchanged=0;
+      timerTime=0;
+      document.getElementById("timerNumber").value="已用时间："+timerTime+'s';
+      judgeForFinish=true;
+      lastId="#img9";
+      lastNumber=15;
+
+      function restorePicture()
+      {
+        for (var i = 1; i <=9; i++) 
+        {
+          $("#img"+i).attr("src",""+i+".png");
+        }
+      }
+      restorePicture();
+    	  
+
+      allFadeIn();
+    }//刷新
+
+
+	function exchangePicture()
+	{
+
+		judgeForExchangeOrNot=Math.pow(nowNumber-lastNumber,2);
+
+		if (judgeForExchangeOrNot==36||judgeForExchangeOrNot==1)
+		{
+			  nowLocation=document.getElementById(nowIdForDOM).src;
+			  $(lastId).fadeOut(200);
+			  $(nowId).fadeOut(200);
+		    $(lastId).attr("src",nowLocation);
+		    $(lastId).fadeIn(200);
+		    lastId=nowId;
+		    $(nowId).attr("src","9.png");
+		    $(nowId).fadeIn(200);
+		    lastNumber=nowNumber;
+		}//交换图片
+     
+
+     var judgeForWinNumber=new Array()
+      function judgeForWin()
+      {
+        for (var i = 1; i <=8; i++) 
+        {
+          judgeForWinNumber[i]=new Boolean($("#img"+i).attr("src")==initialPicture[i]||$("#img"+i).attr("src")==""+i+".png");
+
+        }
+      }
+      judgeForWin();
+     
+        judgeForFinish=new Boolean(judgeForWinNumber[1]==true&&judgeForWinNumber[2]==true&&
+                                   judgeForWinNumber[3]==true&&judgeForWinNumber[4]==true&&
+                                   judgeForWinNumber[5]==true&&judgeForWinNumber[6]==true&&
+                                   judgeForWinNumber[7]==true&&judgeForWinNumber[8]==true);
+
+        if (judgeForExchangeOrNot==36||judgeForExchangeOrNot==1)
+        {
+	       if (judgeForFinish==true)
+	          {
+	    	    alert("信积拉奶·-·你竟然赢了");
+	          }//输赢判断
+	      }
+
+  }
+
+
+</script>	
+
+<script type="text/javascript">
+var timerTime=0;
+
+function timerFunction() 
+{
+  if (judgeForFinish==false) 
+  {
+    document.getElementById("timerNumber").value=""+timerTime+'s';
+    timerTime=timerTime+1;
+  }
+}
+
+var timer=window.setInterval(function(){timerFunction()},1000);
+//计时器
+</script>
+
+<div  style="animation: allEnter 4s;margin-left: -50px;">
+
+  <div style="width: 300px;height: 100px;margin-left: 900px;position: absolute;">
+    <div class="div-rotate changeCss" >
+      <div class="backgroundStyle"></div>
+      <div class="textStyle">读取记录</div>
+      <div class="clickStyle" onclick="read()"></div>
+    </div>
+    <div class="div-rotate changeCss" >
+      <div class="backgroundStyle"></div>
+      <div class="textStyle">储存记录</div>
+      <div class="clickStyle" onclick="store()"></div>
+    </div>
+  </div>
+
+  <!--这是按钮区1-->
+
+  <div style="position: absolute;margin-top:120px;margin-left: 975px;">
+    <div class="div-rotate" >
+      <div class="backgroundStyle"></div>
+      <div><input type="text" name="3333" value="已用时间：" id="timerNumber" class="textStyle" style="background:none;border: none;" /></div>
+      <div class="clickStyle"></div>
+    </div>
+  </div>
+
+  <audio controls="controls" loop="loop" autoplay="autoplay" style="margin-top: 400px;margin-left: 940px;position: absolute;" >
+    <source src="backgroundMusic.mp3" type="audio/mpeg" />
+  </audio>
+
+
+  <table >
+	  <tr> 
+		  <td onclick='nowId="#img1";nowIdForDOM="img1";nowNumber=1;exchangePicture();'><img src="1.png" id="img1" name="1"></td>
+		  <td onclick='nowId="#img2";nowIdForDOM="img2";nowNumber=2;exchangePicture();'><img src="2.png" id="img2" name="2"></td>
+		  <td onclick='nowId="#img3";nowIdForDOM="img3";nowNumber=3;exchangePicture();'><img src="3.png" id="img3" name="3"></td>
+	  </tr>
+    <tr>
+	    <td onclick='nowId="#img4";nowIdForDOM="img4";nowNumber=7;exchangePicture();'><img src="4.png" id="img4" name="4"></td>
+	    <td onclick='nowId="#img5";nowIdForDOM="img5";nowNumber=8;exchangePicture();'><img src="5.png" id="img5" name="5"></td>
+	    <td onclick='nowId="#img6";nowIdForDOM="img6";nowNumber=9;exchangePicture();'><img src="6.png" id="img6" name="6"></td>
+    </tr>
+    <tr>
+	    <td onclick='nowId="#img7";nowIdForDOM="img7";nowNumber=13;exchangePicture();'><img src="7.png" id="img7" name="7"></td>
+	    <td onclick='nowId="#img8";nowIdForDOM="img8";nowNumber=14;exchangePicture();'><img src="8.png" id="img8" name="8"></td>
+	    <td onclick='nowId="#img9";nowIdForDOM="img9";nowNumber=15;exchangePicture();'><img src="9.png" id="img9" name="9"></td>
+   </tr>
+   <!--这里是表格内容-->
+  </table>
+
+  <div style="width: 300px;height: 100px;margin-left: 900px;margin-top: -140px;position: absolute;">
+    <div class="div-rotate changeCss" >
+      <div class="backgroundStyle"></div>
+      <div class="textStyle">点击打乱</div>
+      <div class="clickStyle" onclick="range()"></div>
+    </div>
+
+    <div class="div-rotate changeCss" >
+      <div class="backgroundStyle"></div>
+      <div class="textStyle">点击恢复</div>
+      <div class="clickStyle" onclick="restore()"></div>
+    </div>
+  </div>
+
+  <!--这是按钮区2-->
+</div>
+
+<script type="text/javascript">
+  var initialPicture=new Array();
+  function recordInitialPicture()
+      {
+        for (var i = 1; i <=9; i++) 
+        {
+
+          initialPicture[i]=document.getElementById("img"+i).src;
+
+        }
+      }
+      recordInitialPicture();
+	    
+      //这是获取每个图片的src
+
+      var judgeForFinish=new Boolean(true);
+      var judgeForClick1=new Boolean(true);
+      var judgeForClick2;
+
+</script>
+
+<script type="text/javascript" src="rangePictureWithSolution.js"></script>
+<script type="text/javascript">
+  function store()
+  {
+      var nowPicture=new Array();
+      function recordPicture()
+      {
+        for (var i = 1; i <=9; i++) 
+        {
+
+          nowPicture[i]=document.getElementById("img"+i).src;
+
+        }
+      }
+      recordPicture();
+
+      var storeNowPicture=new Array();
+      function storeMessage()
+      {
+        for (var i = 1; i <= 9; i++) 
+        {
+          localStorage.setItem("box"+i,nowPicture[i]);
+        }
+      }
+      storeMessage();
+
+    localStorage.setItem("box10",timerTime);
+    localStorage.setItem("box11",lastId);
+    localStorage.setItem("box12",lastNumber);
+    localStorage.setItem("box13",judgeForFinish);
+
+  }
+  function read()
+  {
+    var judgeForStore=new Boolean(localStorage.box1!=null&&localStorage.box2!=null&&localStorage.box3!=null&&localStorage.box4!=null&&localStorage.box5!=null&&                            localStorage.box6!=null&&localStorage.box7!=null&&localStorage.box8!=null&&localStorage.box9!=null&&localStorage.box10!=null&&                            localStorage.box11!=null&&localStorage.box12!=null&&localStorage.box13!=null)
+
+    if (judgeForStore==true) 
+    {
+      allFadeOut();
+      timerTime=+localStorage.box10;
+      document.getElementById("timerNumber").value=""+timerTime+'s';
+      lastId=localStorage.box11;
+      lastNumber=localStorage.box12;
+
+
+      if (localStorage.box13=="true") 
+      {
+        judgeForFinish=true;
+      }
+      else
+      {
+        judgeForFinish=false;
+      }
+    
+
+      function loadMessage()
+      {
+        for (var i = 1; i <= 9; i++) 
+        {
+
+          $("#img"+i).attr("src",localStorage.getItem("box"+i));
+        }
+      }
+      loadMessage();
+
+    allFadeIn();
+
+    }
+    else
+    {
+      alert("你尚未储存信息·-·或信息不完整·-·");
+    }
+
+  }
+
+  function clickFrequency()
+  {
+    function timerForOnce()
+    {
+      judgeForClick1=true;
+    }
+    if (judgeForClick1==true)
+    {
+      setTimeout(function(){timerForOnce()},800);
+    }
+    else
+    {
+      alert("你点那么快做啥啊·-·");
+    }
+
+
+    judgeForClick2=judgeForClick1;
+    judgeForClick1=false;
+
+//降低点击频率
+  }
+
+
+</script>
+
+</body>
+
+</html>
